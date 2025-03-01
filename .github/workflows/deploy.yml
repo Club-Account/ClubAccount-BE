@@ -55,7 +55,7 @@ jobs:
           key: ${{ secrets.AWS_PRIVATE_KEY }}
           source: "./infra/deploy/scripts/deploy.sh"  # ✅ 경로 확인
           target: "/home/ubuntu/"
-          strip_components: 3
+          strip_components: 4
 
       - name: Verify deploy.sh on EC2
         uses: appleboy/ssh-action@master
