@@ -53,7 +53,7 @@ jobs:
           host: ${{ secrets.AWS_HOST }}
           username: ${{ secrets.AWS_USER }}
           key: ${{ secrets.AWS_PRIVATE_KEY }}
-          source: "deploy.sh"
+          source: "infra/deploy/scripts/deploy.sh"
           target: "/home/ubuntu/"
 
       # ✅ EC2에서 배포 스크립트 실행
