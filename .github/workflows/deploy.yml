@@ -87,7 +87,7 @@ jobs:
           key: ${{ secrets.AWS_PRIVATE_KEY }}
           source: "./infra/deploy/docker-compose.yml"
           target: "/home/ubuntu/"
-          strip_components: 4
+          strip_components: 3
 
 
         # ✅ EC2에서 배포 스크립트 실행
