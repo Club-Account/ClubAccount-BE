@@ -13,7 +13,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Cache Gradle packages  # (필요하면 유지)
+      - name: Cache Gradle packages
         uses: actions/cache@v3
         with:
           path: |
@@ -46,14 +46,6 @@ jobs:
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/thinkboo-backend-app:latest .
           docker push ${{ secrets.DOCKER_USERNAME }}/thinkboo-backend-app:latest
-
-      # ✅ EC2에서 SSH 키 설정 (이전에는 없었음)
-      - name: Set up SSH key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.AWS_PRIVATE_KEY }}" | base64 --decode > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.AWS_HOST }} >> ~/.ssh/known_hosts
 
       # ✅ EC2에서 배포 스크립트 실행
       - name: Deploy to AWS Server
