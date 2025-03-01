@@ -42,6 +42,9 @@ docker pull $DOCKER_USERNAME/thinkboo-backend-app:latest  # 최신 이미지 가
 echo "📂 application.yml 파일 생성 중..."
 mkdir -p /home/ubuntu/config
 cat > /home/ubuntu/config/application.yml <<EOL
+server:
+  port: 8080
+
 spring:
   config:
     activate:
