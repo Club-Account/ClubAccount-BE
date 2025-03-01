@@ -59,6 +59,17 @@ logging:
     name: /app/logs/app.log
   level:
     root: INFO
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      show-details: always
+  server:
+    address: 0.0.0.0
 EOL
 
 echo "🔒 파일 권한 설정 중..."
