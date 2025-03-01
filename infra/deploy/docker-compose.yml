@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  backend:
+    container_name: deploy-backend
+    image: "${DOCKER_USERNAME}/thinkboo-backend-app:latest"
+    restart: always
+    env_file:
+      - .env  # 환경 변수 관리 (DB 정보, JWT 등)
+    volumes:
+      - /home/ubuntu/app/config/application.yml:/app/config/application.yml  # application.yml 컨테이너에 연결
+      - logs:/app/logs  # 로그 데이터 유지
+    networks:
+      - thinkboo_network
+    expose:
+      - "8080"
+    # depends_on:
+    #   - redis  # Redis 추가 시 주석 해제
+
+volumes:
+  logs:  # 로그 볼륨 추가
+
+networks:
+  thinkboo_network:
+    driver: bridge
