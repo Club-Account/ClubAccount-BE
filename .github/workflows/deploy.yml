@@ -55,6 +55,6 @@ jobs:
           username: ${{ secrets.AWS_USER }}
           key: ${{ secrets.AWS_PRIVATE_KEY }}
           script: |
-            cd /home/ubuntu
-            chmod +x deploy.sh
-            ./deploy.sh  # 🔥 최신 Docker 이미지 Pull & 컨테이너 재시작
+            cd /home/ubuntu/app
+            chmod +x infra/deploy/scripts/deploy.sh
+            ./infra/deploy/scripts/deploy.sh
