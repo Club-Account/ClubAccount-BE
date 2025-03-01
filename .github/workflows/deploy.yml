@@ -79,6 +79,16 @@ jobs:
           source: ".env"
           target: "/home/ubuntu/"
 
+      - name: Upload docker-compose.yml to EC2
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USER }}
+          key: ${{ secrets.AWS_PRIVATE_KEY }}
+          source: "./infra/deploy/docker-compose.yml"
+          target: "/home/ubuntu/"
+          strip_components: 4
+
 
         # ✅ EC2에서 배포 스크립트 실행
       - name: Deploy to AWS Server

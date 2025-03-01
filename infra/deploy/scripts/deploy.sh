@@ -1,4 +1,23 @@
 #!/bin/bash
+echo "🛠️ Docker 및 Docker Compose 설치 확인..."
+
+if ! command -v docker &> /dev/null; then
+    echo "🚨 Docker가 설치되지 않았습니다. 설치를 진행합니다..."
+    sudo apt update
+    sudo apt install -y docker.io
+    sudo systemctl start docker
+    sudo systemctl enable docker
+else
+    echo "✅ Docker가 이미 설치되어 있습니다."
+fi
+
+if ! command -v docker-compose &> /dev/null; then
+    echo "🚨 Docker Compose가 설치되지 않았습니다. 설치를 진행합니다..."
+    sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    sudo chmod +x /usr/local/bin/docker-compose
+else
+    echo "✅ Docker Compose가 이미 설치되어 있습니다."
+fi
 
 echo "🚀 배포 시작: $(date)"
 
