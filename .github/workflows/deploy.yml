@@ -53,10 +53,19 @@ jobs:
           host: ${{ secrets.AWS_HOST }}
           username: ${{ secrets.AWS_USER }}
           key: ${{ secrets.AWS_PRIVATE_KEY }}
-          source: "infra/deploy/scripts/deploy.sh"
+          source: "./infra/deploy/scripts/deploy.sh"  # ✅ 경로 확인
           target: "/home/ubuntu/"
 
-      # ✅ EC2에서 배포 스크립트 실행
+      - name: Verify deploy.sh on EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USER }}
+          key: ${{ secrets.AWS_PRIVATE_KEY }}
+          script: |
+            ls -l /home/ubuntu/deploy.sh || echo "deploy.sh not found!"
+
+        # ✅ EC2에서 배포 스크립트 실행
       - name: Deploy to AWS Server
         uses: appleboy/ssh-action@master
         with:
@@ -66,4 +75,5 @@ jobs:
           script: |
             cd /home/ubuntu
             chmod +x deploy.sh
+            ls -l deploy.sh  # ✅ 파일이 존재하는지 확인
             ./deploy.sh  # 🔥 최신 Docker 이미지 Pull & 컨테이너 재시작
