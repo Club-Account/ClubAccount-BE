@@ -3,7 +3,7 @@ name: Deploy to AWS
 on:
   push:
     branches:
-      - main  # main 브랜치에 푸시될 때 자동 배포
+      - TB-1
 
 jobs:
   deploy:
@@ -27,10 +27,10 @@ jobs:
         run: |
           if [ ! -x ./gradlew ]; then chmod +x gradlew; fi
 
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
+          java-version: '21'
           distribution: 'temurin'
 
       - name: Build Project with Gradle
@@ -46,6 +46,14 @@ jobs:
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/thinkboo-backend-app:latest .
           docker push ${{ secrets.DOCKER_USERNAME }}/thinkboo-backend-app:latest
+
+      # ✅ EC2에서 SSH 키 설정 (이전에는 없었음)
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.AWS_PRIVATE_KEY }}" | base64 --decode > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.AWS_HOST }} >> ~/.ssh/known_hosts
 
       # ✅ EC2에서 배포 스크립트 실행
       - name: Deploy to AWS Server
