@@ -38,9 +38,9 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-tasks.named('test') {
+tasks.withType(Test).configureEach {
 	useJUnitPlatform()
-	finalizedBy 'jacocoTestReport'  // 테스트 후 JaCoCo 리포트 생성
+	finalizedBy jacocoTestReport
 }
 
 jacoco {
@@ -54,10 +54,12 @@ tasks.jacocoTestReport {  // 이미 존재하는 태스크를 설정
 		html.required = true
 	}
 }
-task uploadCoverageToCodecov(type: Exec) {  // Codecov 업로드 자동화
+
+tasks.register("uploadCoverageToCodecov", Exec) {
 	dependsOn jacocoTestReport
 	commandLine 'bash', '-c', "bash <(curl -s https://codecov.io/bash) -t ${System.getenv('CODECOV_TOKEN')} -f build/reports/jacoco/test/jacocoTestReport.xml"
 }
+
 
 sonar {
 	properties {
