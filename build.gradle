@@ -2,6 +2,8 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.4.3'
 	id 'io.spring.dependency-management' version '1.1.7'
+	id 'jacoco'  // JaCoCo 플러그인 추가
+	id 'org.sonarqube' version '4.3.1.3277' // SonarQube 플러그인 추가
 }
 
 group = 'com'
@@ -38,4 +40,26 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+	finalizedBy 'jacocoTestReport'  // 테스트 후 JaCoCo 리포트 생성
+}
+
+jacoco {
+	toolVersion = "0.8.10"  // 최신 JaCoCo 버전 사용
+}
+
+tasks.jacocoTestReport {  // 이미 존재하는 태스크를 설정
+	dependsOn test  // 테스트 실행 후 실행되도록 설정
+	reports {
+		xml.required = true
+		html.required = true
+	}
+}
+
+sonar {
+	properties {
+		property "sonar.projectKey", "my-project"
+		property "sonar.organization", "my-org"
+		property "sonar.host.url", "https://sonarcloud.io"
+		property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml" // ✅ SonarQube에 JaCoCo 리포트 연결
+	}
 }
