@@ -26,11 +26,14 @@ jobs:
       - name: Run Tests and Generate Coverage Report
         run: ./gradlew test jacocoTestReport
 
+      - name: Debug JaCoCo Report Path
+        run: ls -l ./build/reports/jacoco/test/ || echo "JaCoCo report not found"
+
       - name: Upload Coverage Report to Codecov
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./build/reports/jacoco/test/jacocoTestReport.xml
+          files: ${{ github.workspace }}/build/reports/jacoco/test/jacocoTestReport.xml  # ✅ 절대 경로 사용
           flags: unittests  # Codecov 리포트 구분을 위한 플래그
           fail_ci_if_error: true  # 오류 발생 시 CI 실패 처리
           verbose: true  # 디버깅을 위한 상세 로그 활성화
