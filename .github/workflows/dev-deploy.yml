@@ -3,7 +3,7 @@ name: Deploy to AWS
 on:
   push:
     branches:
-      - TB-1
+      - develop
 
 jobs:
   deploy:
@@ -56,15 +56,6 @@ jobs:
           source: "./infra/deploy/scripts/deploy.sh"  # ✅ 경로 확인
           target: "/home/ubuntu/"
           strip_components: 4
-
-      - name: Verify deploy.sh on EC2
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.AWS_HOST }}
-          username: ${{ secrets.AWS_USER }}
-          key: ${{ secrets.AWS_PRIVATE_KEY }}
-          script: |
-            ls -l /home/ubuntu/deploy.sh || echo "deploy.sh not found!"
 
       - name: Create .env file
         run: |
