@@ -13,8 +13,6 @@ services:
       - thinkboo_network
     ports:
       - "8080:8080"
-    expose:
-      - "8080"
     # depends_on:
     #   - redis  # Redis 추가 시 주석 해제
 
