@@ -23,8 +23,13 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Debug Test Source
+        run: |
+          echo "Checking test source files..."
+          ls -lR src/test/java || echo "❌ No test files found!"
+
       - name: Run Tests and Generate Coverage Report
-        run: ./gradlew clean test jacocoTestReport  # ✅ 캐시 무효화를 위해 clean 추가
+        run: ./gradlew clean test jacocoTestReport --no-build-cache --rerun-tasks  # ✅ 캐시 무효화 & 강제 실행
 
       - name: Debug JaCoCo Report Path
         run: |
