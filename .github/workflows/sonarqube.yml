@@ -23,15 +23,18 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build with Gradle
-        run: ./gradlew build --info
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+      - name: Check if tests exist and run accordingly
+        run: |
+          if ./gradlew tasks --all | grep -q '^test '; then
+            echo "✅ 테스트 코드가 존재합니다. 실행합니다."
+            ./gradlew build --info
+          else
+            echo "⚠️ 테스트 코드가 없습니다. 테스트를 제외하고 빌드합니다."
+            ./gradlew build -x test --info
+          fi
 
       - name: SonarQube Scan
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          run: ./gradlew sonarqube --info
+        run: ./gradlew sonarqube --info
