@@ -1,0 +1,8 @@
+codecov:
+  require_ci_to_pass: false  # CI 실패 여부와 관계없이 PR에 리포트 추가
+
+comment:
+  layout: "reach,diff,flags,files,footer"
+  behavior: default
+  require_changes: false
+  branches: []  # 모든 브랜치에서 PR 코멘트 남기도록 설정

@@ -31,3 +31,6 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./build/reports/jacoco/test/jacocoTestReport.xml
+          flags: unittests  # Codecov 리포트 구분을 위한 플래그
+          fail_ci_if_error: true  # 오류 발생 시 CI 실패 처리
+          verbose: true  # 디버깅을 위한 상세 로그 활성화
