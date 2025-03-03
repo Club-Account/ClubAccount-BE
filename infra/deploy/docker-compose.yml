@@ -1,4 +1,3 @@
-version: "3.8"
 
 services:
   backend:
@@ -12,8 +11,8 @@ services:
       - logs:/app/logs  # 로그 데이터 유지
     networks:
       - thinkboo_network
-    expose:
-      - "8080"
+    ports:
+      - "8080:8080"
     # depends_on:
     #   - redis  # Redis 추가 시 주석 해제
 

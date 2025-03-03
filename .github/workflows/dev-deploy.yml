@@ -3,7 +3,7 @@ name: Deploy to AWS
 on:
   push:
     branches:
-      - main  # main 브랜치에 푸시될 때 자동 배포
+      - develop
 
 jobs:
   deploy:
@@ -13,7 +13,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Cache Gradle packages  # (필요하면 유지)
+      - name: Cache Gradle packages
         uses: actions/cache@v3
         with:
           path: |
@@ -27,10 +27,10 @@ jobs:
         run: |
           if [ ! -x ./gradlew ]; then chmod +x gradlew; fi
 
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
+          java-version: '21'
           distribution: 'temurin'
 
       - name: Build Project with Gradle
@@ -47,7 +47,41 @@ jobs:
           docker build -t ${{ secrets.DOCKER_USERNAME }}/thinkboo-backend-app:latest .
           docker push ${{ secrets.DOCKER_USERNAME }}/thinkboo-backend-app:latest
 
-      # ✅ EC2에서 배포 스크립트 실행
+      - name: Upload Deploy Script to EC2
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USER }}
+          key: ${{ secrets.AWS_PRIVATE_KEY }}
+          source: "./infra/deploy/scripts/deploy.sh"  # ✅ 경로 확인
+          target: "/home/ubuntu/"
+          strip_components: 4
+
+      - name: Create .env file
+        run: |
+          echo "${{ secrets.ENV_FILE }}" > .env
+
+      - name: Upload .env to EC2
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USER }}
+          key: ${{ secrets.AWS_PRIVATE_KEY }}
+          source: ".env"
+          target: "/home/ubuntu/"
+
+      - name: Upload docker-compose.yml to EC2
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USER }}
+          key: ${{ secrets.AWS_PRIVATE_KEY }}
+          source: "./infra/deploy/docker-compose.yml"
+          target: "/home/ubuntu/"
+          strip_components: 3
+
+
+        # ✅ EC2에서 배포 스크립트 실행
       - name: Deploy to AWS Server
         uses: appleboy/ssh-action@master
         with:
@@ -57,4 +91,5 @@ jobs:
           script: |
             cd /home/ubuntu
             chmod +x deploy.sh
+            ls -l deploy.sh  # ✅ 파일이 존재하는지 확인
             ./deploy.sh  # 🔥 최신 Docker 이미지 Pull & 컨테이너 재시작
