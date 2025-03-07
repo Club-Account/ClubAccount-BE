@@ -1,5 +1,6 @@
 package com.ClubAccount_BE.receipt.infrastructure.adapter.entity;
 
+import com.ClubAccount_BE.core.entity.TimeBaseEntity;
 import com.ClubAccount_BE.user.infrastructure.adapter.persistence.entity.UserEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,7 +24,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ReceiptEntity {
+public class ReceiptEntity extends TimeBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

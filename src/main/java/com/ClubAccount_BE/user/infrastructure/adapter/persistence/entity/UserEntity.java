@@ -1,5 +1,6 @@
 package com.ClubAccount_BE.user.infrastructure.adapter.persistence.entity;
 
+import com.ClubAccount_BE.core.entity.TimeBaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,7 +18,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserEntity {
+public class UserEntity extends TimeBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +34,7 @@ public class UserEntity {
 
     @Column(nullable = false)
     private String role;
-    
+
     private String profileUrl;
 
     private String rink;

@@ -1,5 +1,6 @@
 package com.ClubAccount_BE.question.infrastructure.adapter.entity;
 
+import com.ClubAccount_BE.core.entity.TimeBaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -20,7 +21,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class AnswerEntity {
+public class AnswerEntity extends TimeBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
